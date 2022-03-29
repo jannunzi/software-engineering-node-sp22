@@ -37,10 +37,10 @@ const app = express();
 app.use(express.json());
 app.use(cors({
     credentials: true,
-    origin: 'http://localhost:3000'
+    origin: process.env.CORS_ORIGIN
 }));
 
-const SECRET = 'process.env.SECRET';
+const SECRET = process.env.EXPRESS_SESSION_SECRET;
 let sess = {
     secret: SECRET,
     saveUninitialized: true,
