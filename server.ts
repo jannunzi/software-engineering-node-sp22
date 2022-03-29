@@ -45,7 +45,8 @@ let sess = {
     saveUninitialized: true,
     resave: true,
     cookie: {
-        secure: false
+        sameSite: process.env.NODE_ENV === "production" ? 'none' : 'lax', // must be 'none' to enable cross-site delivery
+        secure: process.env.NODE_ENV === "production", // must be true if sameSite='none'
     }
 }
 
@@ -53,10 +54,10 @@ console.log("app.get('env')")
 console.log(app.get('env'))
 console.log(process.env)
 
-if (process.env.ENVIRONMENT === 'PRODUCTION') {
+if (process.env.NODE_ENV === 'production') {
     console.log('in production')
     app.set('trust proxy', 1) // trust first proxy
-    sess.cookie.secure = true // serve secure cookies
+    // sess.cookie.secure = true // serve secure cookies
 }
 
 try {
