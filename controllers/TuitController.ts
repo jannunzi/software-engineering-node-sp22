@@ -75,12 +75,6 @@ export default class TuitController implements TuitControllerI {
      * body formatted as JSON arrays containing the tuit objects
      */
     findAllTuitsByUser = (req: Request, res: Response) => {
-        console.log('==> findAllTuitsByUser');
-        // @ts-ignore
-        const profile = req.session['profile'];
-        console.log('==> profile');
-        console.log(profile);
-
         // @ts-ignore
         let userId = req.params.uid === "my" && req.session['profile'] ?
             // @ts-ignore
@@ -102,17 +96,10 @@ export default class TuitController implements TuitControllerI {
      * database
      */
     createTuitByUser = (req: Request, res: Response) => {
-        console.log('==> createTuitByUser');
-        // @ts-ignore
-        const profile = req.session['profile'];
-        console.log('==> profile');
-        console.log(profile);
         // @ts-ignore
         let userId = req.params.uid === "my" && req.session['profile'] ?
             // @ts-ignore
             req.session['profile']._id : req.params.uid;
-
-        console.log(userId);
         if (userId === "my") {
             res.sendStatus(503);
             return;

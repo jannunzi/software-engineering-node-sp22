@@ -29,7 +29,6 @@ const DB_PASSWORD = process.env.DB_PASSWORD;
 const HOST = "cluster0.m8jeh.mongodb.net";
 const DB_NAME = "myFirstDatabase";
 const DB_QUERY = "retryWrites=true&w=majority";
-// const connectionString = `${PROTOCOL}://${DB_USERNAME}:${DB_PASSWORD}@${HOST}/${DB_NAME}?${DB_QUERY}`;// connect to the database
 const connectionString = `${PROTOCOL}://${DB_USERNAME}:${DB_PASSWORD}@${HOST}/${DB_NAME}?${DB_QUERY}`;// connect to the database
 mongoose.connect(connectionString);
 
@@ -39,34 +38,21 @@ app.use(cors({
     origin: process.env.CORS_ORIGIN
 }));
 
-const SECRET = process.env.EXPRESS_SESSION_SECRET;
 let sess = {
-    secret: SECRET,
+    secret: process.env.EXPRESS_SESSION_SECRET,
     saveUninitialized: true,
     resave: true,
     cookie: {
-        sameSite: process.env.NODE_ENV === "production" ? 'none' : 'lax', // must be 'none' to enable cross-site delivery
-        secure: process.env.NODE_ENV === "production", // must be true if sameSite='none'
+        sameSite: process.env.NODE_ENV === "production" ? 'none' : 'lax',
+        secure: process.env.NODE_ENV === "production",
     }
 }
 
-console.log("app.get('env')")
-console.log(app.get('env'))
-console.log(process.env)
-
 if (process.env.NODE_ENV === 'production') {
-    console.log('in production')
     app.set('trust proxy', 1) // trust first proxy
-    // sess.cookie.secure = true // serve secure cookies
 }
 
-try {
-    console.log('adding session')
-    console.log(sess)
-    app.use(session(sess))
-} catch (e) {
-    console.log(e);
-}
+app.use(session(sess))
 app.use(express.json());
 
 app.get('/', (req: Request, res: Response) =>
