@@ -54,11 +54,18 @@ console.log(app.get('env'))
 console.log(process.env)
 
 if (process.env.ENVIRONMENT === 'PRODUCTION') {
+    console.log('in production')
     app.set('trust proxy', 1) // trust first proxy
     sess.cookie.secure = true // serve secure cookies
 }
 
-app.use(session(sess))
+try {
+    console.log('adding session')
+    console.log(sess)
+    app.use(session(sess))
+} catch (e) {
+    console.log(e);
+}
 app.use(express.json());
 
 app.get('/', (req: Request, res: Response) =>
